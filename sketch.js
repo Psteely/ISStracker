@@ -27,11 +27,12 @@ let deltaDiff;
 let myLatitude;
 let myLongitude;
 let firstSound = true;
-let ISSviz = 750;
-let updateInterval = 5000;    // in miliseconds
+let ISSviz ;
+let updateInterval =5000;    
 
 getCurrentLocation();
 getISS();
+
 
 setInterval(getISS,updateInterval);
 
@@ -45,6 +46,11 @@ const lat = data.latitude;
 const lng = data.longitude;
 let vel = data.velocity;
 
+const proximityP = document.getElementById("proximity");
+const proximityLabP = document.getElementById("proxLabel");
+proximityLabP.textContent = "Audible Proximity " + proximityP.value;
+ISSviz = proximityP.value;
+
 
 const latP = document.getElementById("pLat");
 latP.innerText = "Latitude = " + lat;
@@ -53,9 +59,17 @@ lngP.innerText = "Longitude = " + lng;
 const velP = document.getElementById("pVelocity");
 let velS = addCommas(round(vel));
 velP.innerText = "Velocity " + velS + " km/h";
+
 const closeVelP = document.getElementById("pCloseVel");
-let closeVelS = addCommas(closeVel);
-closeVelP.innerText = "Closing Velocity " + closeVelS + " km/h";
+if (closeVel >= 0 ) {
+    let closeVelS = addCommas(closeVel);
+    closeVelP.innerText = "Closing Velocity " + closeVelS + " km/h";
+} else {
+    let closeVelS = addCommas(closeVel *-1); 
+    closeVelP.innerText = "Departing Velocity " + closeVelS + " km/h";
+}
+
+
 const maplock = document.getElementById('maplock');
 
 

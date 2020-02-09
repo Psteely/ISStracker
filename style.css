@@ -262,6 +262,12 @@ color: #000000;
 
 }
 
+.slideLabel {
+  font-size: 10pt;
+  color: #000000;
+  
+  }
+
 .button {
   background-color: #4CAF50;
   border: none;
