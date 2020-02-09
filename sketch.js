@@ -22,6 +22,7 @@ let audioB;
 let d ;
 let t;
 let closeVel;
+let deltaDiff;
 
 let myLatitude;
 let myLongitude;
@@ -39,22 +40,24 @@ setInterval(getISS,updateInterval);
 async function getISS() {
 const response = await fetch(issURL);
 const data = await response.json();
-//console.log(data);
+
 const lat = data.latitude;
 const lng = data.longitude;
-const vel = data.velocity;
-//console.log(lat,lng);
+let vel = data.velocity;
+
 
 const latP = document.getElementById("pLat");
 latP.innerText = "Latitude = " + lat;
 const lngP = document.getElementById("pLong");
 lngP.innerText = "Longitude = " + lng;
 const velP = document.getElementById("pVelocity");
-velP.innerText = "Velocity " + round(vel)/1000 + " km/h";
+let velS = addCommas(round(vel));
+velP.innerText = "Velocity " + velS + " km/h";
 const closeVelP = document.getElementById("pCloseVel");
-closeVelP.innerText = "Closing Velocity " + closeVel + " km/h";
+let closeVelS = addCommas(closeVel);
+closeVelP.innerText = "Closing Velocity " + closeVelS + " km/h";
 const maplock = document.getElementById('maplock');
-//console.log(maplock.checked);
+
 
 
 if (!mymap) {    //  only if we haven't already initialised the map
@@ -90,15 +93,16 @@ t = Date.now();
 
 d = floor((R * c) /1000);  // convert from m to km and floor it
 const distanceP = document.getElementById("pDistance");
-pDistance.innerText = "Distance from current location =  " + d + " KM";
+pDistance.innerText = "Distance from current location =  " + d + " KM ";
 
-let deltaDiff = prevD- d;
+deltaDiff = prevD- d;
 let deltaTime = t - prevT;
-closeVel = round((deltaDiff / (deltaTime / 1000)) *1000) /1000;
-//console.log(deltaTime);
+const timeSec = deltaTime/1000;
+closeVel = round(deltaDiff * (60/timeSec) *60);
+
 
 let audioB  = document.getElementById("audioButton");
-//console.log(getAudioContext().state);
+
 
 if (getAudioContext().state == 'running') {
     audioB.textContent = "Proximity alert on, press to disable";
@@ -127,10 +131,10 @@ async function getCurrentLocation () {
     
 
     navigator.geolocation.getCurrentPosition(async position =>{
-       // console.log(position);
+      
         myLatitude = position.coords.latitude;
         myLongitude = position.coords.longitude;
-       // console.log(myLatitude,myLongitude);
+       
     });
 }
 }
@@ -146,3 +150,15 @@ function error(err) {
 
     }
   }
+
+function addCommas(nStr) {
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+}
