@@ -1,15 +1,15 @@
 {
   "name": "isstracker",
   "version": "1.0.0",
-  
-  
+
+
   "description": "tracking test for the ISS",
   "main": "sketch.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    
-      "start" : "node index.js"
-    
+
+    "start": "node index.js"
+
   },
   "author": "PSteely",
   "license": "ISC",
